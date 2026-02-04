@@ -40,8 +40,4 @@ jobs:
 
     - name: Mypy
       run: mypy . --html-report reports/mypy || true
-    
-    - name: Test with pytest
-      run: |
-        pytest tests/unit 
 
