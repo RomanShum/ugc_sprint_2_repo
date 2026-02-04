@@ -33,7 +33,7 @@ jobs:
 
     - name: Lint with flake8
       run: |
-        flake8 . --select=WPS1, WPS2, WPS3,WPS4,WPS5 --show-source --statistics
+        flake8 . --select=WPS1,WPS2,WPS3,WPS4,WPS5 --show-source --statistics
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
     - name: Mypy
