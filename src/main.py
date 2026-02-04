@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
 from beanie import init_beanie
 from fastapi import FastAPI
-from motor.motor_asyncio import AsyncIOMotorClient,AsyncIOMotorDatabase
+from motor.motor_asyncio import AsyncIOMotorClient
 from api.urls import router
 from models.like import Like
 from models.favorite import Favorite
@@ -12,9 +12,8 @@ settings = Settings()
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
-    client: AsyncIOMotorClient[str] = AsyncIOMotorClient(settings.database_url)
-    db: str = client.db_name
-    await init_beanie(database=db, document_models=[Like, Favorite, Review])
+    client = AsyncIOMotorClient(settings.database_url)
+    await init_beanie(database=client.db_name, document_models=[Like, Favorite, Review])
     yield
     client.close()
 
