@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Request, status
 from uuid import UUID
 from models.like import Like
-import services.like_service as like_service
+from services import like_service
 
 router = APIRouter(prefix='/like', tags=['likes'])
 

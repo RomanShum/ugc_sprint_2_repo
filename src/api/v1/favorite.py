@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Request, status
 from uuid import UUID
 from models.favorite import Favorite
-import services.favorite_service as favorite_service
+from services import favorite_service
 
 router = APIRouter(prefix='/favorite', tags=['favorites'])
 

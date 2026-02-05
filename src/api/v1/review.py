@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Request, status
 from uuid import UUID
 from models.review import Review
-import services.review_service as review_service
+from services import review_service
 
 router = APIRouter(prefix='/review', tags=['reviews'])
 
