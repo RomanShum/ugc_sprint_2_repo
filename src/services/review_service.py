@@ -14,14 +14,14 @@ async def get_review( user_id, film_id):
         )
     return review
 
-async def set_review( user_id, film_id, value):
+async def set_review( user_id, film_id, review_value):
     review = await get_review_from_db(user_id, film_id)
     if review:
-        review.value = value
+        review.review_value = review_value
         review.updated = datetime.now()
         return await review.save()
     else:
-        review = Review(user_id=user_id, film_id=film_id, value=value)
+        review = Review(user_id=user_id, film_id=film_id, review_value=review_value)
         return await review.insert()
 
 async def delete_review( user_id, film_id):

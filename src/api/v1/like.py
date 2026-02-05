@@ -18,7 +18,7 @@ async def get_like(
 async def set_like(
     body: Like
 ) -> Like:
-    return await like_service.set_like(body.film_id, body.user_id, body.value)
+    return await like_service.set_like(body.film_id, body.user_id, body.like_value)
 
 
 @router.delete("/{film_id}/{user_id}", status_code=status.HTTP_200_OK)

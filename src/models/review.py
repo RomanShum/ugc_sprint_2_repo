@@ -2,15 +2,17 @@ from uuid import UUID
 from beanie import Document, Indexed
 from pydantic import Field
 from datetime import datetime
+from core.settings import Settings
 
+settings = Settings()
 
 class Review(Document):
     film_id: UUID = Indexed(UUID)
     user_id: UUID = Indexed(UUID)
-    value: str = Field(
+    review_value: str = Field(
         ...,
-        min_length=1,
-        max_length=5000
+        min_length=settings.min_review_length,
+        max_length=settings.max_review_length
     )
     created: datetime = Field(default_factory=datetime.now)
     updated: datetime = Field(default_factory=datetime.now)

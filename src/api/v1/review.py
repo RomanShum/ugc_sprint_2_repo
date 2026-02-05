@@ -17,7 +17,7 @@ async def get_review(
 async def set_review(
     body: Review
 ) -> Review:
-    return await review_service.set_review(body.film_id, body.user_id, body.value)
+    return await review_service.set_review(body.film_id, body.user_id, body.review_value)
 
 
 @router.delete("/{film_id}/{user_id}", status_code=status.HTTP_200_OK)
