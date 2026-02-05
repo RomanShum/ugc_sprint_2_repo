@@ -9,7 +9,7 @@ from models.review import Review
 from core.settings import Settings
 
 settings = Settings()
-##
+
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     client = AsyncIOMotorClient(settings.database_url)
