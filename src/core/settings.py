@@ -3,6 +3,7 @@ from pydantic import Field
 
 
 class Settings(BaseSettings):
+    sentry_dsn: str
     project_name: str = 'app'
     min_review_length: int = 1
     max_review_length: int = 5000

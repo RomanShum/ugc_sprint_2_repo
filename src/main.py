@@ -7,11 +7,21 @@ from models.like import Like
 from models.favorite import Favorite
 from models.review import Review
 from core.settings import Settings
+import sentry_sdk
+from sentry_sdk.integrations.fastapi import FastApiIntegration
+import logstash
 
 settings = Settings()
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
+    dsn = settings.sentry_dsn
+    if dsn:
+        sentry_sdk.init(
+            dsn=settings.sentry_dsn,
+            integrations=[FastApiIntegration()],
+            send_default_pii=True
+        )
     client = AsyncIOMotorClient(settings.database_url)
     await init_beanie(database=client.db_name, document_models=[Like, Favorite, Review])
     yield
