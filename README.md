@@ -1,4 +1,4 @@
-# UGC Sprint 1
+# UGC Sprint 2
 
 ## 🛠 Запуск
 ##### Запуск: docker-compose up --build
