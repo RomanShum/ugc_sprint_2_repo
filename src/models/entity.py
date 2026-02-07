@@ -6,6 +6,15 @@ from core.settings import Settings
 
 settings = Settings()
 
+class Favorite(Document):
+    film_id: UUID = Indexed(UUID)
+    user_id: UUID = Indexed(UUID)
+
+class Like(Document):
+    film_id: UUID = Indexed(UUID)
+    user_id: UUID = Indexed(UUID)
+    like_value: int = Field(..., ge=1, le=10)
+
 class Review(Document):
     film_id: UUID = Indexed(UUID)
     user_id: UUID = Indexed(UUID)

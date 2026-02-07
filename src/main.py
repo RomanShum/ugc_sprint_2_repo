@@ -3,7 +3,7 @@ from beanie import init_beanie
 from fastapi import FastAPI, Request
 from motor.motor_asyncio import AsyncIOMotorClient
 from api.urls import router
-from models import Like, Favorite, Review
+from models.entity import Like, Favorite, Review
 from core.settings import Settings
 import sentry_sdk
 from sentry_sdk.integrations.fastapi import FastApiIntegration

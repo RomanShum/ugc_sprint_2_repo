@@ -1,4 +1,4 @@
-from models.like import Like
+from models.entity import Like
 from fastapi import HTTPException, status
 
 async def get_like_from_db(user_id, film_id):

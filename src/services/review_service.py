@@ -1,4 +1,4 @@
-from models.review import Review
+from models.entity import Review
 from fastapi import HTTPException, status
 from datetime import datetime
 

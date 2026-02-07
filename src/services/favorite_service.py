@@ -1,4 +1,4 @@
-from models.favorite import Favorite
+from models.entity import Favorite
 from fastapi import HTTPException, status
 
 
