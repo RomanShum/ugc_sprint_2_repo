@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     logstash_transport: str
     logstash_ssl: bool = True
     logstash_port: int = 5044
+    event_ttl: int = 30
     project_name: str = 'app'
     min_review_length: int = 1
     max_review_length: int = 5000

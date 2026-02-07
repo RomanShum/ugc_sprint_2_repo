@@ -3,9 +3,7 @@ from beanie import init_beanie
 from fastapi import FastAPI, Request
 from motor.motor_asyncio import AsyncIOMotorClient
 from api.urls import router
-from models.like import Like
-from models.favorite import Favorite
-from models.review import Review
+from models import Like, Favorite, Review
 from core.settings import Settings
 import sentry_sdk
 from sentry_sdk.integrations.fastapi import FastApiIntegration
@@ -49,30 +47,31 @@ logstash_handler = AsynchronousLogstashHandler(
     transport=settings.logstash_transport,
     ssl_enable=settings.logstash_ssl,
     enable=True,
-    event_ttl=30,
+    event_ttl=settings.event_ttl,
 )
 logger.addHandler(logstash_handler)
+
+async def put_info(call_next, request, request_id):
+    response = await call_next(request)
+    logger.info('Request', extra={
+        'request_id': request_id,
+        'status_code': response.status_code,
+        'method': request.method,
+    })
+    response.headers['X-Request-Id'] = request_id
+    return response
 
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
     request_id = request.headers.get('X-Request-Id') or str(uuid.uuid4())
 
     try:
-        response = await call_next(request)
-        logger.info('Request', extra={
-            'request_id': request_id,
-            'status_code': response.status_code,
-            'method': request.method,
-        })
+        await put_info(call_next, request, request_id)
 
-        response.headers['X-Request-Id'] = request_id
-
-        return response
-
-    except Exception as e:
+    except Exception as err:
         logger.error('Request failed', extra={
             'request_id': request_id,
-            'error': str(e),
+            'error': str(err),
             'method': request.method,
             'path': request.url.path,
         }, exc_info=True)
