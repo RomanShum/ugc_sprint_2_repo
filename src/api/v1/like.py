@@ -3,7 +3,7 @@ from uuid import UUID
 from models.entity import Like, LikeRequest
 from services import like_service
 from core.depends import get_current_user
-from typing import Annotated
+from typing import Annotated, Optional
 
 router = APIRouter(prefix='/like', tags=['likes'])
 
@@ -20,14 +20,14 @@ async def get_like(
 async def create_like(
     body: LikeRequest,
     user_id: Annotated[UUID, Depends(get_current_user)]
-) -> Like:
+) -> Optional[Like]:
     return await like_service.create_like(film_id=body.film_id, user_id=user_id, like_value=body.like_value)
 
 @router.patch("/", response_model=Like, status_code=status.HTTP_200_OK)
 async def update_like(
     body: LikeRequest,
     user_id: Annotated[UUID, Depends(get_current_user)]
-) -> Like:
+) -> Optional[Like]:
     return await like_service.update_like(film_id=body.film_id, user_id=user_id, like_value=body.like_value)
 
 

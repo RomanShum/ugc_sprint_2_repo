@@ -3,7 +3,7 @@ from uuid import UUID
 from models.entity import Review, ReviewRequest
 from services import review_service
 from core.depends import get_current_user
-from typing import Annotated
+from typing import Annotated, Optional
 
 router = APIRouter(prefix='/review', tags=['reviews'])
 
@@ -19,14 +19,14 @@ async def get_review(
 async def create_review(
     body: ReviewRequest,
     user_id: Annotated[UUID, Depends(get_current_user)]
-) -> Review:
+) -> Optional[Review]:
     return await review_service.create_review(film_id=body.film_id, user_id=user_id, review_value=body.review_value)
 
 @router.patch("/", response_model=Review, status_code=status.HTTP_200_OK)
 async def update_review(
     body: ReviewRequest,
     user_id: Annotated[UUID, Depends(get_current_user)]
-) -> Review:
+) -> Optional[Review]:
     return await review_service.update_review(film_id=body.film_id, user_id=user_id, review_value=body.review_value)
 
 
