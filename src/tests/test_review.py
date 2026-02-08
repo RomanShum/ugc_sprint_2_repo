@@ -28,7 +28,7 @@ def test_get_review(auth_client):
     assert response.json().get(USER_ID) == user_uuid
     assert response.json().get(FILM_ID) == film_uuid
 
-def test_patch_and_get_review(auth_client):
+def test_patch_review(auth_client):
     response = auth_client.patch("/api/v1/review/", json={
     FILM_ID: film_uuid,
     REVIEW_VALUE: REVIEW_VALUE_TEST1
@@ -38,6 +38,7 @@ def test_patch_and_get_review(auth_client):
     assert response.json().get(USER_ID) == user_uuid
     assert response.json().get(FILM_ID) == film_uuid
 
+def test_get_after_patch_review(auth_client):
     response = auth_client.get(f"/api/v1/review/{film_uuid}")
     assert response.status_code == status.HTTP_200_OK
     assert response.json().get(REVIEW_VALUE) == REVIEW_VALUE_TEST1

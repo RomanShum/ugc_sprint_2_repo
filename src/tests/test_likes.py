@@ -28,7 +28,7 @@ def test_get_like(auth_client):
     assert response.json().get(USER_ID) == user_uuid
     assert response.json().get(FILM_ID) == film_uuid
 
-def test_patch_and_get_like(auth_client):
+def test_patch_like(auth_client):
     response = auth_client.patch("/api/v1/like/", json={
     FILM_ID: film_uuid,
     LIKE_VALUE: LIKE_RATING_AVG
@@ -38,6 +38,8 @@ def test_patch_and_get_like(auth_client):
     assert response.json().get(USER_ID) == user_uuid
     assert response.json().get(FILM_ID) == film_uuid
 
+
+def test_get_after_patch_like(auth_client):
     response = auth_client.get(f"/api/v1/like/{film_uuid}")
     assert response.status_code == status.HTTP_200_OK
     assert response.json().get(LIKE_VALUE) == LIKE_RATING_AVG
