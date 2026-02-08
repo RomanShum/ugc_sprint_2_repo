@@ -7,7 +7,7 @@ from jose import jwt, JWTError
 from uuid import UUID
 from typing import Annotated
 async def get_current_user(
-        token: str = Annotated[str, Depends(HTTPBearer())]
+        token: Annotated[str, Depends(HTTPBearer())]
 ):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
