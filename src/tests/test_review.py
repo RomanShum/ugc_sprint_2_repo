@@ -1,6 +1,6 @@
 from fastapi import status
 from core.settings import Settings
-from tools import film_uuid, user_uuid
+# from tools import film_uuid, user_uuid
 from constants import REVIEW_VALUE_TEST, REVIEW_VALUE_TEST1, film_uuid, user_uuid
 
 settings = Settings()
