@@ -1,11 +1,9 @@
 from fastapi import status
 from core.settings import Settings
 from tools import film_uuid, user_uuid
+from constants import REVIEW_VALUE_TEST, REVIEW_VALUE_TEST1
 
 settings = Settings()
-
-REVIEW_VALUE_TEST = "test"
-REVIEW_VALUE_TEST1 = "test1"
 
 def test_create_review(auth_client):
     response = auth_client.post(f"/api/v1/review/", json={

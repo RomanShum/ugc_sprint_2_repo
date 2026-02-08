@@ -1,9 +1,8 @@
 from contextlib import asynccontextmanager
 from beanie import init_beanie
-from fastapi import FastAPI, Request, Depends
+from fastapi import FastAPI, Request
 from motor.motor_asyncio import AsyncIOMotorClient
 from api.urls import router
-from jose import JWTError, jwt
 from models.entity import Like, Favorite, Review
 from core.settings import Settings
 import sentry_sdk
