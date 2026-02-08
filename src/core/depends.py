@@ -5,9 +5,9 @@ from fastapi.security import HTTPBearer
 from fastapi import Depends
 from jose import jwt, JWTError
 from uuid import UUID
-
+from typing import Annotated
 async def get_current_user(
-        token: str = Depends(HTTPBearer())
+        token: str = Annotated[str, Depends(HTTPBearer())]
 ):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
