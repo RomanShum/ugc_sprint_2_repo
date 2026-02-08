@@ -51,30 +51,30 @@ if settings.logstash and settings.logstash_port:
     )
     logger.addHandler(logstash_handler)
 
-async def put_info(call_next, request, request_id):
-    response = await call_next(request)
-    logger.info('Request', extra={
-        'request_id': request_id,
-        'status_code': response.status_code,
-        'method': request.method,
-    })
-    response.headers['X-Request-Id'] = request_id
-    return response
-
-@app.middleware("http")
-async def log_requests(request: Request, call_next):
-    request_id = request.headers.get('X-Request-Id') or str(uuid.uuid4())
-
-    try:
-        return await put_info(call_next, request, request_id)
-
-    except Exception as err:
-        logger.error('Request failed', extra={
+    async def put_info(call_next, request, request_id):
+        response = await call_next(request)
+        logger.info('Request', extra={
             'request_id': request_id,
-            'error': str(err),
+            'status_code': response.status_code,
             'method': request.method,
-            'path': request.url.path,
-        }, exc_info=True)
-        raise
+        })
+        response.headers['X-Request-Id'] = request_id
+        return response
+
+    @app.middleware("http")
+    async def log_requests(request: Request, call_next):
+        request_id = request.headers.get('X-Request-Id') or str(uuid.uuid4())
+
+        try:
+            return await put_info(call_next, request, request_id)
+
+        except Exception as err:
+            logger.error('Request failed', extra={
+                'request_id': request_id,
+                'error': str(err),
+                'method': request.method,
+                'path': request.url.path,
+            }, exc_info=True)
+            raise
 
 app.include_router(router)
