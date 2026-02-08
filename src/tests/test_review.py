@@ -1,47 +1,48 @@
 from fastapi import status
 from core.settings import Settings
-from constants import REVIEW_VALUE_TEST, REVIEW_VALUE_TEST1, film_uuid, user_uuid
+from tools import film_uuid, user_uuid
+from constants import REVIEW_VALUE_TEST, REVIEW_VALUE_TEST1, USER_ID, FILM_ID, REVIEW_VALUE
 
 settings = Settings()
 
 def test_create_review(auth_client):
     response = auth_client.post("/api/v1/review/", json={
-    "film_id": film_uuid,
-    "review_value": REVIEW_VALUE_TEST
+    FILM_ID: film_uuid,
+    REVIEW_VALUE: REVIEW_VALUE_TEST
 })
     assert response.status_code == status.HTTP_201_CREATED
-    assert response.json().get("review_value") == REVIEW_VALUE_TEST
-    assert response.json().get("user_id") == user_uuid
-    assert response.json().get("film_id") == film_uuid
+    assert response.json().get(REVIEW_VALUE) == REVIEW_VALUE_TEST
+    assert response.json().get(USER_ID) == user_uuid
+    assert response.json().get(FILM_ID) == film_uuid
 
     response = auth_client.post("/api/v1/review/", json={
-        "film_id": film_uuid,
-        "review_value": REVIEW_VALUE_TEST
+        FILM_ID: film_uuid,
+        REVIEW_VALUE: REVIEW_VALUE_TEST
     })
     assert response.status_code == status.HTTP_409_CONFLICT
 
 def test_get_review(auth_client):
     response = auth_client.get(f"/api/v1/review/{film_uuid}")
     assert response.status_code == status.HTTP_200_OK
-    assert response.json().get("review_value") == REVIEW_VALUE_TEST
-    assert response.json().get("user_id") == user_uuid
-    assert response.json().get("film_id") == film_uuid
+    assert response.json().get(REVIEW_VALUE) == REVIEW_VALUE_TEST
+    assert response.json().get(USER_ID) == user_uuid
+    assert response.json().get(FILM_ID) == film_uuid
 
 def test_patch_and_get_review(auth_client):
     response = auth_client.patch("/api/v1/review/", json={
-    "film_id": film_uuid,
-    "review_value": REVIEW_VALUE_TEST1
+    FILM_ID: film_uuid,
+    REVIEW_VALUE: REVIEW_VALUE_TEST1
 })
     assert response.status_code == status.HTTP_200_OK
-    assert response.json().get("review_value") == REVIEW_VALUE_TEST1
-    assert response.json().get("user_id") == user_uuid
-    assert response.json().get("film_id") == film_uuid
+    assert response.json().get(REVIEW_VALUE) == REVIEW_VALUE_TEST1
+    assert response.json().get(USER_ID) == user_uuid
+    assert response.json().get(FILM_ID) == film_uuid
 
     response = auth_client.get(f"/api/v1/review/{film_uuid}")
     assert response.status_code == status.HTTP_200_OK
-    assert response.json().get("review_value") == REVIEW_VALUE_TEST1
-    assert response.json().get("user_id") == user_uuid
-    assert response.json().get("film_id") == film_uuid
+    assert response.json().get(REVIEW_VALUE) == REVIEW_VALUE_TEST1
+    assert response.json().get(USER_ID) == user_uuid
+    assert response.json().get(FILM_ID) == film_uuid
 
 
 def test_delete_review(auth_client):
