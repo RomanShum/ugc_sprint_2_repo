@@ -62,13 +62,6 @@ async def put_info(call_next, request, request_id):
     response.headers['X-Request-Id'] = request_id
     return response
 
-@app.get("/test")
-async def test(
-    # user_id: UUID = Depends(get_current_user)
-):
-    return jwt.encode({"user_id": str(uuid.uuid4())}, settings.secret_key,
-                      algorithm=settings.algorithm)
-
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
     request_id = request.headers.get('X-Request-Id') or str(uuid.uuid4())
