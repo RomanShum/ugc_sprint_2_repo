@@ -39,17 +39,17 @@ app = FastAPI(
 
 logger = logging.getLogger('fastapi')
 logger.setLevel(logging.INFO)
-
-logstash_handler = AsynchronousLogstashHandler(
-    host=settings.logstash,
-    port=settings.logstash_port,
-    database_path=None,
-    transport=settings.logstash_transport,
-    ssl_enable=settings.logstash_ssl,
-    enable=True,
-    event_ttl=settings.event_ttl,
-)
-logger.addHandler(logstash_handler)
+if settings.logstash and settings.logstash_port:
+    logstash_handler = AsynchronousLogstashHandler(
+        host=settings.logstash,
+        port=settings.logstash_port,
+        database_path=None,
+        transport=settings.logstash_transport,
+        ssl_enable=settings.logstash_ssl,
+        enable=True,
+        event_ttl=settings.event_ttl,
+    )
+    logger.addHandler(logstash_handler)
 
 async def put_info(call_next, request, request_id):
     response = await call_next(request)
