@@ -7,7 +7,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
 from main import app
 from core.settings import Settings
-from tools import user_uuid
+from constants import user_uuid
 
 settings = Settings()
 

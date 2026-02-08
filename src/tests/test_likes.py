@@ -1,7 +1,6 @@
 from fastapi import status
 from core.settings import Settings
-from tools import film_uuid, user_uuid
-from constants import LIKE_RATING_HIGH, LIKE_RATING_AVG
+from constants import LIKE_RATING_HIGH, LIKE_RATING_AVG, film_uuid, user_uuid
 
 settings = Settings()
 
