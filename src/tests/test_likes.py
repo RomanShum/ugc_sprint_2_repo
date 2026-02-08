@@ -5,7 +5,7 @@ from constants import LIKE_RATING_HIGH, LIKE_RATING_AVG, film_uuid, user_uuid
 settings = Settings()
 
 def test_create_like(auth_client):
-    response = auth_client.post(f"/api/v1/like/", json={
+    response = auth_client.post("/api/v1/like/", json={
     "film_id": film_uuid,
     "like_value": LIKE_RATING_HIGH
 })
@@ -14,7 +14,7 @@ def test_create_like(auth_client):
     assert response.json().get("user_id") == user_uuid
     assert response.json().get("film_id") == film_uuid
 
-    response = auth_client.post(f"/api/v1/like/", json={
+    response = auth_client.post("/api/v1/like/", json={
         "film_id": film_uuid,
         "like_value": LIKE_RATING_HIGH
     })
@@ -28,7 +28,7 @@ def test_get_like(auth_client):
     assert response.json().get("film_id") == film_uuid
 
 def test_patch_and_get_like(auth_client):
-    response = auth_client.patch(f"/api/v1/like/", json={
+    response = auth_client.patch("/api/v1/like/", json={
     "film_id": film_uuid,
     "like_value": LIKE_RATING_AVG
 })
