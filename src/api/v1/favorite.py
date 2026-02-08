@@ -28,5 +28,5 @@ async def set_favorite(
 async def delete_favorite(
     film_id: UUID,
     user_id: Annotated[UUID, Depends(get_current_user)]
-):
+) -> bool:
     return await favorite_service.delete_favorite(film_id=film_id, user_id=user_id)

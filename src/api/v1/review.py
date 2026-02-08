@@ -34,5 +34,5 @@ async def update_review(
 async def delete_review(
     film_id: UUID,
     user_id: Annotated[UUID, Depends(get_current_user)]
-):
+) -> bool:
     return await review_service.delete_review(film_id = film_id, user_id=user_id)
