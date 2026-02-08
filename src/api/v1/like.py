@@ -1,29 +1,38 @@
 from fastapi import APIRouter, Depends, Request, status
 from uuid import UUID
-from models.entity import Like
+from models.entity import Like, LikeRequest
 from services import like_service
+from core.depends import get_current_user
 
 router = APIRouter(prefix='/like', tags=['likes'])
 
 
-@router.get("/{film_id}/{user_id}", response_model=Like)
+@router.get("/{film_id}/", response_model=Like)
 async def get_like(
     film_id: UUID,
-    user_id: UUID
+    user_id: UUID = Depends(get_current_user)
 ) -> Like:
     return await like_service.get_like(film_id=film_id, user_id=user_id)
 
 
-@router.put("/", response_model=Like, status_code=status.HTTP_201_CREATED)
-async def set_like(
-    body: Like
+@router.post("/", response_model=Like, status_code=status.HTTP_201_CREATED)
+async def create_like(
+    body: LikeRequest,
+    user_id: UUID = Depends(get_current_user)
 ) -> Like:
-    return await like_service.set_like(body.film_id, body.user_id, body.like_value)
+    return await like_service.create_like(film_id=body.film_id, user_id=user_id, like_value=body.like_value)
+
+@router.patch("/", response_model=Like, status_code=status.HTTP_200_OK)
+async def update_like(
+    body: LikeRequest,
+    user_id: UUID = Depends(get_current_user)
+) -> Like:
+    return await like_service.update_like(film_id=body.film_id, user_id=user_id, like_value=body.like_value)
 
 
-@router.delete("/{film_id}/{user_id}", status_code=status.HTTP_200_OK)
+@router.delete("/{film_id}/", status_code=status.HTTP_200_OK)
 async def delete_like(
     film_id: UUID,
-    user_id: UUID
+    user_id: UUID = Depends(get_current_user)
 ):
     return await like_service.delete_like(film_id=film_id, user_id=user_id)

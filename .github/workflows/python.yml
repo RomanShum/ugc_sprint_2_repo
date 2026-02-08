@@ -39,6 +39,9 @@ jobs:
     - name: Mypy
       run: mypy src/ || true
 
+    - name: Pytest
+      run: pytest -q || true
+
     - name: Telegram notify (success)
       if: success()
       uses: appleboy/telegram-action@v0.1.1

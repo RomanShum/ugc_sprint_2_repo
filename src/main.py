@@ -1,8 +1,9 @@
 from contextlib import asynccontextmanager
 from beanie import init_beanie
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Depends
 from motor.motor_asyncio import AsyncIOMotorClient
 from api.urls import router
+from jose import JWTError, jwt
 from models.entity import Like, Favorite, Review
 from core.settings import Settings
 import sentry_sdk
@@ -61,12 +62,19 @@ async def put_info(call_next, request, request_id):
     response.headers['X-Request-Id'] = request_id
     return response
 
+@app.get("/test")
+async def test(
+    # user_id: UUID = Depends(get_current_user)
+):
+    return jwt.encode({"user_id": str(uuid.uuid4())}, settings.secret_key,
+                      algorithm=settings.algorithm)
+
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
     request_id = request.headers.get('X-Request-Id') or str(uuid.uuid4())
 
     try:
-        await put_info(call_next, request, request_id)
+        return await put_info(call_next, request, request_id)
 
     except Exception as err:
         logger.error('Request failed', extra={

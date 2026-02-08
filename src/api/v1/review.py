@@ -1,28 +1,37 @@
 from fastapi import APIRouter, Depends, Request, status
 from uuid import UUID
-from models.entity import Review
+from models.entity import Review, ReviewRequest
 from services import review_service
+from core.depends import get_current_user
 
 router = APIRouter(prefix='/review', tags=['reviews'])
 
 
-@router.get("/{film_id}/{user_id}", response_model=Review)
+@router.get("/{film_id}/", response_model=Review)
 async def get_review(
     film_id: UUID,
-    user_id: UUID
+    user_id: UUID = Depends(get_current_user)
 ) -> Review:
     return await review_service.get_review(film_id = film_id, user_id=user_id)
 
-@router.put("/", response_model=Review, status_code=status.HTTP_201_CREATED)
-async def set_review(
-    body: Review
+@router.post("/", response_model=Review, status_code=status.HTTP_201_CREATED)
+async def create_review(
+    body: ReviewRequest,
+    user_id: UUID = Depends(get_current_user)
 ) -> Review:
-    return await review_service.set_review(body.film_id, body.user_id, body.review_value)
+    return await review_service.create_review(film_id=body.film_id, user_id=user_id, review_value=body.review_value)
+
+@router.patch("/", response_model=Review, status_code=status.HTTP_200_OK)
+async def update_review(
+    body: ReviewRequest,
+    user_id: UUID = Depends(get_current_user)
+) -> Review:
+    return await review_service.update_review(film_id=body.film_id, user_id=user_id, review_value=body.review_value)
 
 
-@router.delete("/{film_id}/{user_id}", status_code=status.HTTP_200_OK)
+@router.delete("/{film_id}/", status_code=status.HTTP_200_OK)
 async def delete_review(
     film_id: UUID,
-    user_id: UUID
+    user_id: UUID = Depends(get_current_user)
 ):
     return await review_service.delete_review(film_id = film_id, user_id=user_id)

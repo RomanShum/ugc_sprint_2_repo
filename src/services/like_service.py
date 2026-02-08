@@ -1,7 +1,8 @@
 from models.entity import Like
 from fastapi import HTTPException, status
+from uuid import UUID
 
-async def get_like_from_db(user_id, film_id):
+async def get_like_from_db(user_id: UUID, film_id: UUID):
     return await Like.find_one(Like.user_id == user_id, Like.film_id == film_id)
 
 async def get_like( user_id, film_id):
@@ -13,17 +14,25 @@ async def get_like( user_id, film_id):
         )
     return like
 
-async def set_like( user_id, film_id, like_value):
-    # Проверяем, есть ли уже лайк
-    like = await get_like_from_db(user_id, film_id)
+async def create_like( user_id, film_id, like_value):
+    like = await get_like_from_db(user_id=user_id, film_id=film_id)
     if like:
-        # Обновляем значение
-        like.like_value = like_value
-        return await like.save()
-    else:
-        # Создаём новый
-        like = Like(user_id=user_id, film_id=film_id, like_value=like_value)
-        return await like.insert()
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail='Уже существует'
+        )
+    like = Like(user_id=user_id, film_id=film_id, like_value=like_value)
+    return await like.insert()
+
+async def update_like( user_id, film_id, like_value):
+    like = await get_like_from_db(user_id, film_id)
+    if not like:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail='Не найдено'
+        )
+    like.like_value = like_value
+    return await like.save()
 
 async def delete_like( user_id, film_id):
     like = await get_like_from_db(user_id, film_id)
